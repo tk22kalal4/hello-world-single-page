@@ -38,7 +38,7 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
-          VITE_API_KEY: ${{ secrets.API_KEY }}
+          VITE_GROQ_API_KEY: ${{ secrets.API_KEY }}
         
       - name: Create 404.html for SPA routing
         run: cp dist/index.html dist/404.html
