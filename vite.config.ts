@@ -6,7 +6,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: mode === 'production' ? '/pdf-slice-previewer-pro/' : '/',
+  base: mode === 'production' ? '/hello-world-single-page/' : '/',
   server: {
     host: "::",
     port: 8080,
