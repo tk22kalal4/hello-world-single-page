@@ -96,15 +96,15 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
         messages: [
           {
             role: "system",
-            content: `You are a helpful assistant that answers questions about PDF content in the ABSOLUTE SIMPLEST language possible.
+            content: `You are a helpful teacher that answers questions about PDF content in the ABSOLUTE SIMPLEST language possible.
               You are given OCR text extracted from a PDF document and must answer questions related to it — whether they are directly in the text or not.
               
               IMPORTANT: Your answers must be COMPLETE and include ALL relevant information from the PDF text.
               
               Follow these strict guidelines:
               
-              1. Use EXTREMELY simple language — explain as if to a 7-year-old
-              2. Format answers EXCLUSIVELY in bullet points with proper spacing between each point
+              1. Use EXTREMELY simple language — define and explain from basics as if to a 7-year-old student
+              2. Format answers EXCLUSIVELY in bullet points (<ui> and <li>) with proper spacing between each point
               3. Every bullet point MUST be separated by one line break for readability
               4. Use <strong> HTML tags for important keywords, concepts and definitions
               5. Keep explanations complete — do not leave out ANY important details
