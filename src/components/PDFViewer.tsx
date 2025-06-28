@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { Document, pdfjs } from "react-pdf";
 import { toast } from "sonner";
@@ -7,7 +8,8 @@ import "react-pdf/dist/Page/TextLayer.css";
 import { PDFControls } from "./pdf/PDFControls";
 import { PDFPageNavigator } from "./pdf/PDFPageNavigator";
 import { PDFPage } from "./pdf/PDFPage";
-import { ChatBot } from "./pdf/ChatBot";
+import { ResizableChatBot } from "./pdf/ResizableChatBot";
+import { FloatingChatButton } from "./pdf/FloatingChatButton";
 import { performOCR } from "@/utils/pdfOCR";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
@@ -143,7 +145,6 @@ export const PDFViewer = ({ file }: PDFViewerProps) => {
     try {
       const ocrResult = await performOCR(file, splitPdfPages);
       setOcrText(ocrResult.text);
-      setShowChat(true);
       
       toast.dismiss(loadingToastId);
       toast.success("OCR completed! You can now ask questions about the content.", { duration: 2000 });
@@ -154,6 +155,10 @@ export const PDFViewer = ({ file }: PDFViewerProps) => {
     } finally {
       setIsProcessingOCR(false);
     }
+  };
+
+  const handleToggleChat = () => {
+    setShowChat(!showChat);
   };
 
   return (
@@ -167,76 +172,77 @@ export const PDFViewer = ({ file }: PDFViewerProps) => {
           onPerformOCR={handlePerformOCR}
           isSplit={isSplit}
           hasOcrText={!!ocrText}
-          onToggleChat={() => setShowChat(!showChat)}
+          onToggleChat={handleToggleChat}
         />
       </div>
       
-      <div className="flex flex-col lg:flex-row h-[85vh]">
-        {/* PDF Viewer Section */}
-        <div className={`${showChat ? 'lg:w-1/2' : 'w-full'} ${showChat ? 'h-1/2 lg:h-full' : 'h-full'} transition-all duration-300`}>
-          <div 
-            ref={containerRef}
-            className="h-full overflow-y-auto px-4 relative"
+      {/* PDF Viewer - Full Width */}
+      <div className="w-full h-[85vh]">
+        <div 
+          ref={containerRef}
+          className="h-full overflow-y-auto px-4 relative"
+        >
+          <Document
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={() => toast.error("Error loading PDF")}
+            loading={<div className="text-center py-4">Loading PDF...</div>}
+            className="flex flex-col items-center"
           >
-            <Document
-              file={file}
-              onLoadSuccess={onDocumentLoadSuccess}
-              onLoadError={() => toast.error("Error loading PDF")}
-              loading={<div className="text-center py-4">Loading PDF...</div>}
-              className="flex flex-col items-center"
+            <div
+              style={{
+                height: `${virtualizer.getTotalSize()}px`,
+                width: '100%',
+                position: 'relative',
+              }}
             >
-              <div
-                style={{
-                  height: `${virtualizer.getTotalSize()}px`,
-                  width: '100%',
-                  position: 'relative',
-                }}
-              >
-                {virtualizer.getVirtualItems().map((virtualItem) => {
-                  const pageNumber = pages[virtualItem.index];
-                  return (
-                    <div
-                      key={virtualItem.key}
-                      style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: `${virtualItem.size}px`,
-                        transform: `translateY(${virtualItem.start}px)`,
-                      }}
-                      className="flex justify-center mb-8 relative"
-                    >
-                      <PDFPage
-                        pageNumber={pageNumber}
-                        scale={scale}
-                        isLoaded={loadedPages.has(pageNumber)}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </Document>
-          </div>
-          {numPages > 0 && (
-            <PDFPageNavigator
-              currentPage={currentPage}
-              totalPages={isSplit ? splitPdfPages.length : numPages}
-              onJumpToPage={handleJumpToPage}
-            />
-          )}
+              {virtualizer.getVirtualItems().map((virtualItem) => {
+                const pageNumber = pages[virtualItem.index];
+                return (
+                  <div
+                    key={virtualItem.key}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: `${virtualItem.size}px`,
+                      transform: `translateY(${virtualItem.start}px)`,
+                    }}
+                    className="flex justify-center mb-8 relative"
+                  >
+                    <PDFPage
+                      pageNumber={pageNumber}
+                      scale={scale}
+                      isLoaded={loadedPages.has(pageNumber)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </Document>
         </div>
-        
-        {/* Chat Section */}
-        {showChat && ocrText && (
-          <div className={`${showChat ? 'lg:w-1/2' : 'w-0'} ${showChat ? 'h-1/2 lg:h-full' : 'h-0'} transition-all duration-300 border-t lg:border-t-0 lg:border-l`}>
-            <ChatBot 
-              ocrText={ocrText} 
-              onClose={() => setShowChat(false)} 
-            />
-          </div>
+        {numPages > 0 && (
+          <PDFPageNavigator
+            currentPage={currentPage}
+            totalPages={isSplit ? splitPdfPages.length : numPages}
+            onJumpToPage={handleJumpToPage}
+          />
         )}
       </div>
+      
+      {/* Floating Chat Button */}
+      <FloatingChatButton 
+        onClick={handleToggleChat}
+        hasOcrText={!!ocrText}
+      />
+      
+      {/* Resizable Chatbot */}
+      <ResizableChatBot 
+        ocrText={ocrText} 
+        isVisible={showChat}
+        onToggle={handleToggleChat}
+      />
     </div>
   );
 };
