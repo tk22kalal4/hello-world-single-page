@@ -63,7 +63,7 @@ export const ChatBot = ({ ocrText, onClose }: ChatBotProps) => {
       console.log("Using API Key:", GROQ_API_KEY ? GROQ_API_KEY.substring(0, 20) + "..." : "Not provided");
       
       const requestBody = {
-        model: "llama-3.3-70b-versatile",
+        model: "meta-llama/llama-4-scout-17b-16e-instruct",
         messages: [
           {
             role: "system",
