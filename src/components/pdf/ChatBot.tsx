@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -22,8 +23,8 @@ export const ChatBot = ({ ocrText, onClose }: ChatBotProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Use environment variable for API key
-  const API_KEY = import.meta.env.VITE_API_KEY;
+  // Use environment variable for Groq API key
+  const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,8 +35,8 @@ export const ChatBot = ({ ocrText, onClose }: ChatBotProps) => {
     
     if (!input.trim() || isProcessing) return;
     
-    if (!API_KEY) {
-      toast.error("API key not configured. Please check your environment variables.");
+    if (!GROQ_API_KEY) {
+      toast.error("Groq API key not configured. Please check your environment variables.");
       return;
     }
     
@@ -56,13 +57,13 @@ export const ChatBot = ({ ocrText, onClose }: ChatBotProps) => {
         position: "top-right"
       });
       
-      const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+      const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
       
-      console.log("Making API request to OpenRouter...");
-      console.log("Using API Key:", API_KEY ? API_KEY.substring(0, 20) + "..." : "Not provided");
+      console.log("Making API request to Groq...");
+      console.log("Using API Key:", GROQ_API_KEY ? GROQ_API_KEY.substring(0, 20) + "..." : "Not provided");
       
       const requestBody = {
-        model: "deepseek/deepseek-r1-0528:free",
+        model: "llama-3.3-70b-versatile",
         messages: [
           {
             role: "system",
@@ -105,13 +106,11 @@ Please answer questions related to content.`
 
       console.log("Request body:", requestBody);
       
-      const response = await fetch(OPENROUTER_API_URL, {
+      const response = await fetch(GROQ_API_URL, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'PDF Chat Assistant'
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestBody)
       });
@@ -172,7 +171,7 @@ Please answer questions related to content.`
         if (error.message.includes("Failed to fetch") || error.message.includes("NetworkError")) {
           errorMessage = "Network error. Please check your internet connection and try again.";
         } else if (error.message.includes("401")) {
-          errorMessage = "Authentication error. The API key may be invalid.";
+          errorMessage = "Authentication error. The Groq API key may be invalid.";
         } else if (error.message.includes("429")) {
           errorMessage = "Rate limit exceeded. Please wait a moment and try again.";
         } else if (error.message.includes("404")) {

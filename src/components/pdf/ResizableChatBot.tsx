@@ -30,7 +30,7 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
   const startYRef = useRef<number>(0);
   const startHeightRef = useRef<number>(0);
 
-  const API_KEY = import.meta.env.VITE_API_KEY;
+  const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -68,8 +68,8 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
     
     if (!input.trim() || isProcessing) return;
     
-    if (!API_KEY) {
-      toast.error("API key not configured. Please check your environment variables.");
+    if (!GROQ_API_KEY) {
+      toast.error("Groq API key not configured. Please check your environment variables.");
       return;
     }
     
@@ -89,10 +89,10 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
         position: "top-right"
       });
       
-      const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
+      const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
       
       const requestBody = {
-        model: "deepseek/deepseek-r1-0528:free",
+        model: "llama-3.3-70b-versatile",
         messages: [
           {
             role: "system",
@@ -133,13 +133,11 @@ Please answer questions related to content.`
         max_tokens: 1000
       };
       
-      const response = await fetch(OPENROUTER_API_URL, {
+      const response = await fetch(GROQ_API_URL, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'PDF Chat Assistant'
+          'Authorization': `Bearer ${GROQ_API_KEY}`,
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(requestBody)
       });
@@ -188,7 +186,7 @@ Please answer questions related to content.`
         if (error.message.includes("Failed to fetch") || error.message.includes("NetworkError")) {
           errorMessage = "Network error. Please check your internet connection and try again.";
         } else if (error.message.includes("401")) {
-          errorMessage = "Authentication error. The API key may be invalid.";
+          errorMessage = "Authentication error. The Groq API key may be invalid.";
         } else if (error.message.includes("429")) {
           errorMessage = "Rate limit exceeded. Please wait a moment and try again.";
         } else if (error.message.includes("404")) {
