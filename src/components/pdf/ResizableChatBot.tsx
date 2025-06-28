@@ -92,7 +92,7 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
       const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
       
       const requestBody = {
-        model: "llama-3.3-70b-versatile",
+        model: "meta-llama/llama-4-scout-17b-16e-instruct",
         messages: [
           {
             role: "system",
