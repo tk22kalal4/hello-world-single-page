@@ -96,7 +96,7 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
         messages: [
           {
             role: "system",
-            content: `You are a helpful teacher that answers questions about PDF content in the ABSOLUTE SIMPLEST language possible.
+            content: `You are a helpful teacher that answers questions about PDF content in detail and ABSOLUTE SIMPLEST language possible.
               You are given OCR text extracted from a PDF document and must answer questions related to it — whether they are directly in the text or not.
               
               IMPORTANT: Your answers must be COMPLETE and include ALL relevant information from the PDF text.
@@ -129,8 +129,8 @@ Please answer questions related to content.`
             content: currentInput
           }
         ],
-        temperature: 0.9,
-        max_tokens: 1000
+        temperature: 0.5,
+        max_tokens: 2000
       };
       
       const response = await fetch(GROQ_API_URL, {
