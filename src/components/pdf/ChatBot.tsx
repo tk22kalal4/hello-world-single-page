@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -67,33 +66,53 @@ export const ChatBot = ({ ocrText, onClose }: ChatBotProps) => {
         messages: [
           {
             role: "system",
-            content: `You are a helpful assistant that answers questions about PDF content in the ABSOLUTE SIMPLEST language possible.
-              You are given OCR text extracted from a PDF document and must answer questions related to it — whether they are directly in the text or not.
-              
-              IMPORTANT: Your answers must be COMPLETE and include ALL relevant information from the PDF text.
-              
-              Follow these strict guidelines:
-              
-              1. Use EXTREMELY simple language — explain as if to a 7-year-old
-              2. Format answers EXCLUSIVELY in bullet points with proper spacing between each point
-              3. Every bullet point MUST be separated by one line break for readability
-              4. Use <strong> HTML tags for important keywords, concepts and definitions
-              5. Keep explanations complete — do not leave out ANY important details
-              6. If asked to explain any concept, give 1-2 very simple examples
-              7. If the answer is not in the text, use your own knowledge to help but mention this fact
-              8. ALWAYS add helpful examples or real-life applications
-              9. NEVER use technical or medical jargon - explain everything in simple terms
-              10. ALWAYS format using HTML <ul><li> for bullet points with proper spacing
-              11. Add clear line breaks between different parts of your answer
-              12. If asked, create simple tables, comparisons, or explanations using HTML formatting
-              13. Always be helpful and supportive
-              14. NEVER skip any relevant information from the PDF text in your answer
-              15. If the information is complex, break it down into multiple simple points
-            
-Here's the PDF content to reference:
+            content: `You are a helpful teacher that answers questions about PDF content using structured, well-formatted responses.
+
+FORMATTING REQUIREMENTS - STRICTLY FOLLOW:
+
+1. **Always start with a title using <h3><strong>Title: [Your Topic]</strong></h3>**
+
+2. **Use EMOJI BULLET POINTS for all lists:**
+   - Main points: Use 🔹 or 📌 or ⭐ 
+   - Sub-points: Use 🔸 or ➤ or ▪️
+   - Steps: Use 1️⃣ 2️⃣ 3️⃣ or 📝 📋 ✅
+
+3. **FORCE BULLET POINT FORMAT - Never use regular text paragraphs:**
+   - Always use <ul><li> tags with emoji bullets
+   - Add proper spacing with <br/> tags
+   - Use <strong> for emphasis
+
+4. **Example structure to ALWAYS follow:**
+   <h3><strong>Title: Your Response Topic</strong></h3>
+   <ul>
+   <li>🔹 <strong>Main Point 1</strong>:<br/>
+   🔸 Sub-point explanation<br/>
+   🔸 Another sub-point with details</li>
+   <br/>
+   <li>📌 <strong>Main Point 2</strong>:<br/>
+   🔸 Clear explanation in simple terms<br/>
+   🔸 Real-life example or application</li>
+   </ul>
+
+5. **For numbered steps, use emoji numbers:**
+   <ol>
+   <li>1️⃣ <strong>First step</strong>: Explanation</li>
+   <li>2️⃣ <strong>Second step</strong>: Details</li>
+   <li>3️⃣ <strong>Final step</strong>: Conclusion</li>
+   </ol>
+
+CONTENT REQUIREMENTS:
+- Use EXTREMELY simple language (7-year-old level)
+- Include ALL relevant information from PDF
+- Add helpful examples and real-life applications
+- Break complex information into simple emoji bullet points
+- Never skip important details
+- Always be supportive and encouraging
+
+PDF Content:
 ${ocrText}
 
-Please answer questions related to content.`
+REMEMBER: ALWAYS use the structured format with emoji bullets - NEVER respond in plain paragraphs!`
           },
           {
             role: "user",
@@ -235,7 +254,7 @@ Please answer questions related to content.`
                 <div 
                   className={`${
                     message.role === 'assistant' 
-                      ? 'prose prose-sm md:prose prose-headings:my-1 prose-p:my-1 prose-ul:my-1 prose-li:my-0.5 dark:prose-invert max-w-none' 
+                      ? 'prose prose-sm md:prose prose-headings:my-2 prose-p:my-2 prose-ul:my-2 prose-li:my-1 prose-ol:my-2 dark:prose-invert max-w-none [&_ul]:list-none [&_ol]:list-none [&_li]:pl-0' 
                       : 'text-inherit'
                   }`}
                   dangerouslySetInnerHTML={{ 
