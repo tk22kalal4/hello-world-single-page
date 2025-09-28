@@ -95,7 +95,7 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
         messages: [
           {
             role: "system",
-            content: ``You are an intelligent teaching assistant that provides clear, helpful answers about PDF content. Use OCR text when relevant, otherwise use your knowledge to fully address the user's question.
+            content: `You are an intelligent teaching assistant that provides clear, helpful answers about PDF content. Use OCR text when relevant, otherwise use your knowledge to fully address the user's question.
 
       KEY PRINCIPLES:
       - **Answer directly** what the user is asking - don't add unnecessary definitions if not requested
