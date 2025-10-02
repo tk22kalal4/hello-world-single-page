@@ -118,8 +118,28 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
          - Always use <ul><li> tags with emoji bullets
          - Add proper spacing with <br/> tags
          - Use <strong> for emphasis
+
+      4. **Dynamic sub-points rule:**
+         - The number of sub-points should be flexible
+         - Add as many sub-points as are required to fully explain the user’s question
+         - Do NOT restrict to only 2 sub-points – include any number as needed
       
-      5. **For numbered steps, use emoji numbers:**
+      5. **Example structure to follow:**
+         <h3><strong>Title: Your Response Topic</strong></h3>
+         <ul>
+         <li>🔹 <strong>Main Point 1</strong>:<br/>
+         🔸 Sub-point 1<br/>
+         🔸 Sub-point 2<br/>
+         🔸 Sub-point 3 (if needed)<br/>
+         🔸 ... (add more as required)</li>
+         <br/>
+         <li>📌 <strong>Main Point 2</strong>:<br/>
+         🔸 Sub-point 1<br/>
+         🔸 Sub-point 2<br/>
+         🔸 ... (add more as required)</li>
+         </ul>
+      
+      6. **For numbered steps, use emoji numbers:**
          <ol>
          <li>1️⃣ <strong>First step</strong>: Explanation</li>
          <li>2️⃣ <strong>Second step</strong>: Explanation</li>
