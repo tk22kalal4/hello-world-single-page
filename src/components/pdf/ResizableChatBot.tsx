@@ -119,18 +119,6 @@ export const ResizableChatBot = ({ ocrText, isVisible, onToggle }: ResizableChat
          - Add proper spacing with <br/> tags
          - Use <strong> for emphasis
       
-      4. **Example structure to follow:**
-         <h3><strong>Title: Your Response Topic</strong></h3>
-         <ul>
-         <li>🔹 <strong>Main Point 1</strong>:<br/>
-         🔸 Sub‑point 1<br/>
-         🔸 Sub‑point 2</li>
-         <br/>
-         <li>📌 <strong>Main Point 2</strong>:<br/>
-         🔸 Sub‑point 1<br/>
-         🔸 Sub‑point 2</li>
-         </ul>
-      
       5. **For numbered steps, use emoji numbers:**
          <ol>
          <li>1️⃣ <strong>First step</strong>: Explanation</li>
